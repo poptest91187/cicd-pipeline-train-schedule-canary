@@ -1,7 +1,6 @@
 pipeline {
     agent any
     environment {
-        //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "nabilhermi/train-schedule"
     }
     stages {
@@ -13,7 +12,6 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-          
             steps {
                 script {
                     app = docker.build(DOCKER_IMAGE_NAME)
@@ -23,22 +21,18 @@ pipeline {
                 }
             }
         }
-
-
-                stage('Push Docker Image') {
-           
+        stage('Push Docker Image') {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
+                    // Suppression des tags supplémentaires localement
+                    sh "docker rmi ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    sh "docker rmi ${DOCKER_IMAGE_NAME}:latest"
                 }
             }
         }
-
-
-        
-   
     }
 }
