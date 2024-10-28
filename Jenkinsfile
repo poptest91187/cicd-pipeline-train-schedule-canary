@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE_NAME = "nabilhermi/train-schedule"
+        KUBECONFIG = credentials('kubeconfig-id')
     }
     stages {
         stage('Build') {
