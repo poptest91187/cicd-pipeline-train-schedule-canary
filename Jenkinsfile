@@ -42,7 +42,9 @@ pipeline {
             steps {
                // input 'Deploy to Production?'
                 //milestone(1)
-                sh 'kubectl apply -f train-schedule-kube.yml'
+                withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f train-schedule-kube.yml'
+                }
             }
         }
         
