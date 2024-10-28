@@ -29,10 +29,21 @@ pipeline {
                         app.push("latest")
                     }
                     // Suppression des tags supplémentaires localement
-                    sh "docker rmi ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                    sh "docker rmi ${DOCKER_IMAGE_NAME}:latest"
+                   // sh "docker rmi ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    //sh "docker rmi ${DOCKER_IMAGE_NAME}:latest"
                 }
             }
         }
+
+
+        stage('DeployToProduction') {
+          
+            steps {
+               // input 'Deploy to Production?'
+                //milestone(1)
+                sh 'kubectl apply -f train-schedule-kube.yml'
+            }
+        }
+        
     }
 }
