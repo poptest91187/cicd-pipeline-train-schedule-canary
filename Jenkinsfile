@@ -37,7 +37,7 @@ pipeline {
             }
         }
 
-        stage('Prepare Kubernetes Deployment') {
+         stage('Prepare Kubernetes Deployment') {
             steps {
                 script {
                     // Remplace les variables dans le fichier YAML
@@ -47,6 +47,7 @@ pipeline {
                     """
                 }
             }
+         }
         stage('DeployToProduction') {
           
             steps {
