@@ -42,8 +42,8 @@ pipeline {
                 script {
                     // Remplacement des variables dans le fichier YAML
                     sh """
-                        sed -i 's|\\${DOCKER_IMAGE_NAME}|${DOCKER_IMAGE_NAME}|g' train-schedule-kube.yml
-                        sed -i 's|\\${BUILD_NUMBER}|${env.BUILD_NUMBER}|g' train-schedule-kube.yml
+                        sed -i 's|\\\$DOCKER_IMAGE_NAME|${DOCKER_IMAGE_NAME}|g' train-schedule-kube.yml
+                        sed -i 's|\\\$BUILD_NUMBER|${env.BUILD_NUMBER}|g' train-schedule-kube.yml
                     """
                 }
             }
