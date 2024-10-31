@@ -55,8 +55,8 @@ pipeline {
         stage('DeployToProduction') {
           
             steps {
-               // input 'Deploy to Production?'
-                //milestone(1)
+                input 'Deploy to Production?'
+                milestone(1)
                 withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
                     sh 'kubectl apply -f train-schedule-kube.yml'
                 }
