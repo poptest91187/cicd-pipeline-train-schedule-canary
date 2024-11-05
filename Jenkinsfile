@@ -46,7 +46,8 @@ pipeline {
                     sh """
                         sed -i 's|\\\$DOCKER_IMAGE_NAME|${DOCKER_IMAGE_NAME}|g' train-schedule-kube-canary.yml
                         sed -i 's|\\\$BUILD_NUMBER|${env.BUILD_NUMBER}|g' train-schedule-kube-canary.yml
-                        sed -i 's|\\\$CANARY_REPLICAS|${env.$CANARY_REPLICA}|g' train-schedule-kube-canary.yml
+                        sed -i 's|\\\$DOCKER_IMAGE_NAME|${DOCKER_IMAGE_NAME}|g' delete-train-schedule-kube-canary.yml
+                        sed -i 's|\\\$BUILD_NUMBER|${env.BUILD_NUMBER}|g' delete-train-schedule-kube-canary.yml
                     """
                 }
             }
@@ -83,6 +84,7 @@ pipeline {
                 milestone(1)
                 withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
                     sh 'kubectl apply -f train-schedule-kube.yml'
+                    sh 'kubectl apply -f delete-train-schedule-kube-canary.yml'
                 }
             }
         }
