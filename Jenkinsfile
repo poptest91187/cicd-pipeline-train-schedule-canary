@@ -39,9 +39,7 @@ pipeline {
 
 
         stage('Prepare Kubernetes Deployment canary') {
-            environment { 
-                CANARY_REPLICAS = 1
-            }
+           
             steps {
                 script {
                     // Remplacement des variables dans le fichier YAML
