@@ -54,7 +54,7 @@ pipeline {
             }
         }
 
-        stage('DeployToProduction') {
+        stage('DeployToProduction canary') {
           
             steps {
                // input 'Deploy to Production?'
