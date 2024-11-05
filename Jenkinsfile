@@ -37,6 +37,34 @@ pipeline {
         }
 
 
+
+        stage('Prepare Kubernetes Deployment canary') {
+            environment { 
+                CANARY_REPLICAS = 1
+            }
+            steps {
+                script {
+                    // Remplacement des variables dans le fichier YAML
+                    sh """
+                        sed -i 's|\\\$DOCKER_IMAGE_NAME|${DOCKER_IMAGE_NAME}|g' train-schedule-kube-canary.yml
+                        sed -i 's|\\\$BUILD_NUMBER|${env.BUILD_NUMBER}|g' train-schedule-kube-canary.yml
+                        sed -i 's|\\\$CANARY_REPLICAS|${env.$CANARY_REPLICA}|g' train-schedule-kube-canary.yml
+                    """
+                }
+            }
+        }
+
+        stage('DeployToProduction') {
+          
+            steps {
+               // input 'Deploy to Production?'
+                //milestone(1)
+                withCredentials([file(credentialsId: 'kubeconfig-file', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f train-schedule-kube-canary.yml'
+                }
+            }
+        }
+        
         stage('Prepare Kubernetes Deployment') {
             steps {
                 script {
@@ -48,8 +76,6 @@ pipeline {
                 }
             }
         }
-
-
 
 
         stage('DeployToProduction') {
